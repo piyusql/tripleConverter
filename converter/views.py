@@ -11,7 +11,6 @@ from converter.utils import get_database_list, get_table_list, get_data
 @staff_member_required
 def home(request):
     group_list = request.user.groups.all().values_list('name', flat = True)
-    print group_list
     data = {'group_list' : group_list}
     return render_to_response('index.html', data, context_instance=RequestContext(request))
 
@@ -27,15 +26,13 @@ def structured(request):
         db_name = request.POST.get('database')
         table_name = request.POST.get('table')
         query = request.POST.get('query')
-        form.fields['database'].choices = get_database_list(source)
         if db_name:
-            pass#form.fields['database'].initial = db_name
-        if db_name:
-            form.fields['table'].choices = get_table_list(source, db_name)
+            form.fields['database'].initial = db_name
             if table_name:
                 form.fields['table'].initial = table_name
         if table_name and not query:
             query = "select * from %s limit 10;" %(table_name)
+            form.fields['query'].initial = query
         if query:
             form.fields['response'].initial = get_data(source, db_name, query)
     data['form'] = form

@@ -1,4 +1,4 @@
-DB_LIST_QUERY = "select datname from pg_database;"
+DB_LIST_QUERY = "select datname from pg_database"
 TABLE_LIST_QUERY = "select table_name from information_schema.tables where table_schema = 'public' and table_type = 'BASE TABLE';"
 
 def get_connection(db, host, username, password):

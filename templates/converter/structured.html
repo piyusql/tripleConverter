@@ -1,5 +1,42 @@
 {% extends "base.html" %}
-{% load i18n %}
+
+{% load i18n admin_modify adminmedia %}
+
+{% block extrahead %}{{ block.super }}
+    {% url admin:jsi18n as jsi18nurl %}
+    <script type="text/javascript" src="/admin/jsi18n/"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}scripts/jquery-1.5.1.min.js"></script>
+<!--    <script type="text/javascript" src="{% admin_media_prefix %}js/core.js"></script>
+    <script type="text/javascript" src="{% admin_media_prefix %}js/admin/RelatedObjectLookups.js"></script>
+    <script type="text/javascript" src="{% admin_media_prefix %}js/jquery.min.js"></script>
+    <script type="text/javascript" src="{% admin_media_prefix %}js/jquery.init.js"></script>
+    <script type="text/javascript" src="{% admin_media_prefix %}js/actions.min.js"></script>-->
+    <script >
+        function change_database(a){
+            $.get('/json/get_database_list/', {'source':a},function(data){$('#id_database').html(data)});
+        }
+        function change_tablelist(a,b){
+            $.get('/json/get_table_list/', {'source':a, 'database': b},function(data){$('#id_table').html(data)});
+        }
+        $(document).ready(function(){
+                $("#id_source").change(function () {
+                    var str = "";
+                    $("select option:selected").each(function () {
+                        str = this.value;
+                        });
+                    change_database(str);
+                    })
+
+                $("#id_database").change(function () {
+                    var str = "";
+                    $("select option:selected").each(function () {
+                        str = this.value;
+                        });
+                    change_tablelist($("#id_source").value, str );
+                    })
+            })
+    </script>
+{% endblock %}
 {% block content %}
     <div id="content-main">
         {% if "Admin" in group_list %}

@@ -7,8 +7,7 @@ def get_source_list():
 def get_database_list(_id):
     source = Database.objects.get(id = _id)
     _module = new.module('db_connection')
-    code = source.code_file.read()
-    exec str(code) in _module.__dict__
+    exec str(source.code) in _module.__dict__
     if _module.DB_LIST_QUERY:
         cursor = _module.get_connection(source.db_name, source.location, source.username, source.password)
         cursor.execute(_module.DB_LIST_QUERY)
@@ -20,8 +19,7 @@ def get_database_list(_id):
 def get_table_list(_id, db_name):
     source = Database.objects.get(id = _id)
     _module = new.module('db_connection')
-    code = source.code_file.read()
-    exec str(code) in _module.__dict__
+    exec str(source.code) in _module.__dict__
     cursor = _module.get_connection(db_name, source.location, source.username, source.password)
     try:
         _table_query = _module.TABLE_LIST_QUERY %(db_name)
@@ -34,8 +32,7 @@ def get_table_list(_id, db_name):
 def get_data(_id, db_name, query):
     source = Database.objects.get(id = _id)
     _module = new.module('db_connection')
-    code = source.code_file.read()
-    exec str(code) in _module.__dict__
+    exec str(source.code) in _module.__dict__
     cursor = _module.get_connection(db_name, source.location, source.username, source.password)
     cursor.execute(query)
     return cursor.fetchall()
