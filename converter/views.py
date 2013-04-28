@@ -22,13 +22,18 @@ def structured(request):
     #import pdb;pdb.set_trace()
     form = StructuredDataForm()
     if request.POST:
+        form = StructuredDataForm(request.POST)
         source = request.POST.get('source')
         db_name = request.POST.get('database')
         table_name = request.POST.get('table')
         query = request.POST.get('query')
         form.fields['database'].choices = get_database_list(source)
         if db_name:
+            pass#form.fields['database'].initial = db_name
+        if db_name:
             form.fields['table'].choices = get_table_list(source, db_name)
+            if table_name:
+                form.fields['table'].initial = table_name
         if table_name and not query:
             query = "select * from %s limit 10;" %(table_name)
         if query:

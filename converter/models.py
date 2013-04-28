@@ -8,7 +8,6 @@ class OverwriteStorage(FileSystemStorage):
         """
             make the slug file name available to the folder to write the code content
         """
-        import pdb;pdb.set_trace()
         # If the filename already exists, remove it as if it was a true file system
         file_path = os.path.join(settings.APPLICATION_PATH, name)
         if self.exists(file_path):
@@ -36,4 +35,3 @@ class Database( models.Model ):
     
     def __unicode__( self ):
         return "%s - %s" %( self.name, self.version )
-

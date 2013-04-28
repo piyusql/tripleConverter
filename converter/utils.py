@@ -9,9 +9,12 @@ def get_database_list(_id):
     _module = new.module('db_connection')
     code = source.code_file.read()
     exec str(code) in _module.__dict__
-    cursor = _module.get_connection(source.db_name, source.location, source.username, source.password)
-    cursor.execute(_module.DB_LIST_QUERY)
-    db_list = [e_value(x) for x in cursor.fetchall()]
+    if _module.DB_LIST_QUERY:
+        cursor = _module.get_connection(source.db_name, source.location, source.username, source.password)
+        cursor.execute(_module.DB_LIST_QUERY)
+        db_list = [e_value(x) for x in cursor.fetchall()]
+    else:
+        db_list = [source.db_name]
     return tuple(zip(db_list, db_list))
 
 def get_table_list(_id, db_name):
@@ -20,7 +23,11 @@ def get_table_list(_id, db_name):
     code = source.code_file.read()
     exec str(code) in _module.__dict__
     cursor = _module.get_connection(db_name, source.location, source.username, source.password)
-    cursor.execute(_module.TABLE_LIST_QUERY %(db_name))
+    try:
+        _table_query = _module.TABLE_LIST_QUERY %(db_name)
+    except TypeError, e:
+        _table_query = _module.TABLE_LIST_QUERY
+    cursor.execute(_table_query)
     table_list = [e_value(x) for x in cursor.fetchall()]
     return tuple(zip(table_list, table_list))
 
