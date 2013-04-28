@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />{% endblock %}
+{% block coltype %}colMS{% endblock %}
+{% block bodyclass %}dashboard{% endblock %}
+
+{% block content %}
+    <h1>Triple Conversion System</h1>
+    <div id="content-main">
+        <div class="module">
+            <table>
+                <caption><a href="#" class="section" title="Converter">{% blocktrans %}Structured{% endblocktrans %}</a></caption>
+                <tr><th scope="row"><a href="/converter/structured" title="Converet Tripple">Use It Now</a></th></tr>
+            </table>
+        </div>
+
+        <div class="module">
+            <table>
+                <caption><a href="#" class="section" title="Converter">{% blocktrans %}Semi-Structured{% endblocktrans %}</a></caption>
+                <tr><th scope="row"><a href="/converter/semi-structured" title="Converet Tripple">Use It Now</a></th></tr>
+            </table>
+        </div>
+
+        <div class="module">
+            <table>
+                <caption><a href="#" class="section" title="Converter">{% blocktrans %}Un-Structured{% endblocktrans %}</a></caption>
+                <tr><th scope="row"><a href="/converter/un-structured" title="Converet Tripple">Use It Now</a></th></tr>
+            </table>
+        </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+    <div id="content-related"></div>
+{% endblock %}
