@@ -1,0 +1,18 @@
+<VirtualHost *:80>
+    ServerAdmin admin@tripleconverter.in
+    DocumentRoot /data/tripleConverter
+    ServerName 127.0.0.1
+    <Directory /data/tripleConverter>
+        #Order deny,allow
+        #Allow from all
+        Options FollowSymLinks
+        AllowOverride None
+    </Directory>
+    Alias /admin/media/ /home/ubuntu/.virtualenvs/dj4/lib/python2.7/site-packages/django/contrib/admin/static/admin/
+    Alias /media /data/tripleConverter/media
+    Alias /static /data/tripleConverter/media
+    WSGIDaemonProcess  www.tripleconverter.in user=www-data group=www-data processes=8 threads=75\
+    python-path=/home/ubuntu/.virtualenvs/dj4/lib/python2.7/site-packages
+    WSGIProcessGroup www.tripleconverter.in
+    WSGIScriptAlias / /data/tripleConverter/tripleConverter/wsgi.py
+</VirtualHost>
