@@ -38,3 +38,6 @@ def get_data(_id, db_name, query):
     return cursor.fetchall()
    
 e_value = lambda x : x.values()[0] if isinstance(x,(dict)) else x[0]
+
+def transform_to_triple(data_tuple):
+    return "yet to implement"

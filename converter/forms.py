@@ -10,4 +10,6 @@ class StructuredDataForm( forms.Form ):
 
     def __init__(self, *args, **kwargs):
         super(StructuredDataForm, self).__init__(*args, **kwargs)
-        self.fields['source'].choices = get_source_list()
+        choices = [('','Please select Source')]
+        choices.extend(get_source_list())
+        self.fields['source'].choices = choices

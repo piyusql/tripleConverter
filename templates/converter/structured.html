@@ -1,16 +1,10 @@
 {% extends "base.html" %}
 
 {% load i18n admin_modify adminmedia %}
-
 {% block extrahead %}{{ block.super }}
     {% url admin:jsi18n as jsi18nurl %}
     <script type="text/javascript" src="/admin/jsi18n/"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}scripts/jquery-1.5.1.min.js"></script>
-<!--    <script type="text/javascript" src="{% admin_media_prefix %}js/core.js"></script>
-    <script type="text/javascript" src="{% admin_media_prefix %}js/admin/RelatedObjectLookups.js"></script>
-    <script type="text/javascript" src="{% admin_media_prefix %}js/jquery.min.js"></script>
-    <script type="text/javascript" src="{% admin_media_prefix %}js/jquery.init.js"></script>
-    <script type="text/javascript" src="{% admin_media_prefix %}js/actions.min.js"></script>-->
     <script >
         function change_database(a){
             $.get('/json/get_database_list/', {'source':a},function(data){$('#id_database').html(data)});
@@ -21,7 +15,7 @@
         $(document).ready(function(){
                 $("#id_source").change(function () {
                     var str = "";
-                    $("select option:selected").each(function () {
+                    $("#id_source option:selected").each(function () {
                         str = this.value;
                         });
                     change_database(str);
@@ -29,10 +23,10 @@
 
                 $("#id_database").change(function () {
                     var str = "";
-                    $("select option:selected").each(function () {
+                    $("#id_database option:selected").each(function () {
                         str = this.value;
                         });
-                    change_tablelist($("#id_source").value, str );
+                    change_tablelist($("#id_source").val(), str );
                     })
             })
     </script>
@@ -51,7 +45,29 @@
     <h3>You can select data source here</h3>
     <form action="" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        <select name="source" id="id_source">
+            {% for item in source_list %}
+                <option value="{{item.0}}"{% ifequal item.0 source %}selected="selected"{% endifequal %}>{{item.1}}</option>
+            {% endfor %}
+        </select>
+
+        <select name="database" id="id_database">
+            {% for item in db_list %}
+                <option value="{{item.0}}"{% ifequal item.0 db_name %}selected="selected"{% endifequal %}>{{item.1}}</option>
+            {% endfor %}
+        </select>
+        
+        <select name="table" id="id_table">
+            {% for item in table_list %}
+                <option value="{{item.0}}"{% ifequal item.0 table_name %}selected="selected"{% endifequal %}>{{item.1}}</option>
+            {% endfor %}
+        </select>
         <input type="submit" value="Submit"/>
+        <hr/>
+        <h4>Showing top 10 data for the selected table:</h4>
+        <textarea name="response" id="id_response" rows=10 cols=80>{{response}}</textarea>
+        <hr/>
+        <h4>Showing triple model for the above data:</h4>
+        <textarea name="triple_response" id="id_triple_response" rows=16 cols=80>{{triple_response}}</textarea>
     </form>
 {% endblock %}
