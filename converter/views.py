@@ -33,7 +33,7 @@ def structured(request):
                     response = get_data(source, db_name, query)
                     triple_response = transform_to_triple(source, db_name, table_name, response)
         except Exception as e:
-            response = "There is some error with the program for selected input please check %s" %(e)
+            response = "There is some error with the program for selected input please check\n\n%s" %(e)
         source = str(source)
     return render_to_response('converter/structured.html', locals(), context_instance=RequestContext(request))
  

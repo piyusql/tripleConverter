@@ -29,6 +29,22 @@ def get_table_list(_id, db_name):
     table_list = [e_value(x) for x in cursor.fetchall()]
     return tuple(zip(table_list, table_list))
 
+def get_column_list(_id, db_name, table_name):
+    source = Database.objects.get(id = _id)
+    _module = new.module('db_connection')
+    exec str(source.code) in _module.__dict__
+    cursor = _module.get_connection(db_name, source.location, source.username, source.password)
+    try:
+        _column_query = _module.COLUMN_LIST_QUERY %(db_name, table_name)
+    except TypeError, e:
+        try:
+            _column_query = _module.COLUMN_LIST_QUERY %(table_name)
+        except TypeError, e:
+            _column_query = _module.COLUMN_LIST_QUERY
+    cursor.execute(_column_query)
+    column_list = cursor.fetchall()
+    return column_list
+
 def get_data(_id, db_name, query):
     source = Database.objects.get(id = _id)
     _module = new.module('db_connection')
@@ -52,10 +68,9 @@ def transform_to_triple(source, db_name, table, result):
     for i, _table in enumerate(table_list):
         _table_id = id + i + 1
         x_print(id,'rel:id', _table_id)
-        _schema = "SELECT column_name,column_type FROM information_schema.columns WHERE table_schema = '%s' \
-                   AND table_name='%s' ORDER BY ordinal_position;" %(db_name, _table)
+        _schema = get_column_list(source, db_name, _table)
         #tuple having first value as table name and second for column description
-        tables.append((_table_id, _table, get_data(source, db_name, _schema)))
+        tables.append((_table_id, _table, _schema))
     for _table in tables:
         _table_id = _table[0]
         x_print(_table_id,'rel_name:string',_table[1])
